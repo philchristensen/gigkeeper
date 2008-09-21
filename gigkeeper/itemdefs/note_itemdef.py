@@ -9,22 +9,21 @@ from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck, select
 
 from gigkeeper import editable
-from gigkeeper.model import url
+from gigkeeper.model import note
 
 __itemdef__ = define.itemdef(
 	__config			= dict(
-		name			= 'url',
-		label			= 'URLs',
+		name			= 'note',
+		label			= 'notes',
 		acl				= 'access admin',
 		category		= 'contact info',
 		weight			= 2,
-		model_class		= url.URL,
-		title_column	= 'url',
+		model_class		= note.Note,
 	),
 	
-	url_for				= editable.ItemTitleField(
+	note_for			= editable.ItemTitleField(
 		column			= 'item_id',
-		label			= 'URL for:',
+		label			= 'Note for:',
 		flabel			= 'name',
 		weight			= -4,
 		listing			= True
@@ -32,20 +31,27 @@ __itemdef__ = define.itemdef(
 	
 	type				= select.SelectField(
 		label			= 'type:',
-		options			= url.URL_TYPES,
+		options			= note.NOTE_TYPES,
 		weight			= 1,
 		search			= True,
 		listing			= True,
 	),
 	
-	url					= string.StringField(
-		label			= 'url:',
+	summary				= string.StringField(
+		label			= 'summary:',
 		size			= 60,
 		maxlength 		= 255,
 		weight			= 2,
 		listing			= True,
 		link			= True,
 		search			= True,
+	),
+	
+	description			= string.TextAreaField(
+		label			= 'description:',
+		rows			= 8,
+		cols			= 70,
+		weight			= 3,
 	),
 	
 	item_id				= string.HiddenField(
