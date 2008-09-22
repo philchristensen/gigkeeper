@@ -143,7 +143,8 @@ CREATE TABLE `url` (
   `item_table` varchar(32),
 -- homepage, myspace, facebook
   `type` varchar(32),
-  `url` varchar(255)
+  `url` varchar(255),
+  `created_date` datetime
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 CREATE TABLE `note` (
@@ -152,5 +153,6 @@ CREATE TABLE `note` (
   `item_table` varchar(32),
   `type` varchar(32),
   `summary` varchar(255),
-  `description` text
+  `description` text,
+  `created_date` datetime
 ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;

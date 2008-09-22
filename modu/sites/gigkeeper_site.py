@@ -29,12 +29,15 @@ class Site(object):
 		application.base_domain = 'localhost'
 		application.db_url = 'MySQLdb://gigkeeper:Mekdeap7@localhost/gigkeeper'
 		
+		application.activate('/assets', static.FileResource, os.path.dirname(assets.__file__))
+		
 		import gigkeeper
 		compiled_template_root = os.path.abspath(os.path.join(os.path.dirname(gigkeeper.__file__), '../var'))
 		if(os.path.exists(compiled_template_root)):
 			application.compiled_template_root = compiled_template_root
 		
-		application.activate('/assets', static.FileResource, os.path.dirname(assets.__file__))
+		gigkeeper_assets_root = os.path.abspath(os.path.join(os.path.dirname(gigkeeper.__file__), 'assets'))
+		application.activate('/gigkeeper-assets', static.FileResource, gigkeeper_assets_root)
 		
 		import gigkeeper.itemdefs
 		application.activate('/admin', resource.AdminResource, default_path='admin/listing/page', itemdef_module=gigkeeper.itemdefs)

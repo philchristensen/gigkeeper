@@ -47,6 +47,6 @@ __itemdef__ = define.itemdef(
 	
 	notes				= note.NoteListField(
 		label			= 'notes:',
-		weight			= 3,
+		weight			= 4,
 	),
 )

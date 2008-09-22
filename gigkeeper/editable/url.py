@@ -4,6 +4,8 @@
 # $Id$
 #
 
+import urllib
+
 from modu.persist import sql
 from modu.util import form, tags
 from modu.editable import define
@@ -22,6 +24,15 @@ class URLListField(define.definition):
 					item_table=storable.get_table(), __order_by='type')
 		
 		if(urls):
+			params = urllib.urlencode({
+				'__init__[item_id]'		: storable.get_id(),
+				'__init__[item_table]'	: storable.get_table(),
+			})
+			add_url_url = req.get_path(req.prepath, 'detail/url/new?') + params
+			frm['add_url'](
+				type	= 'markup',
+				value	= tags.a(href=add_url_url)['Add URL'] 
+			)
 			for u in urls:
 				frm['urls'][u.get_id()](
 					prefix = '<div>',
