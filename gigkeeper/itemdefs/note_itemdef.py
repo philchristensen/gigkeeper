@@ -19,6 +19,7 @@ __itemdef__ = define.itemdef(
 		category		= 'contact info',
 		weight			= 2,
 		model_class		= note.Note,
+		hidden			= True,
 	),
 	
 	note_for			= editable.ItemTitleField(

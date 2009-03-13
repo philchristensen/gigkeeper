@@ -20,6 +20,7 @@ __itemdef__ = define.itemdef(
 		weight			= 2,
 		model_class		= url.URL,
 		title_column	= 'url',
+		hidden			= True,
 	),
 	
 	url_for				= editable.ItemTitleField(
