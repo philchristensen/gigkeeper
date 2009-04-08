@@ -95,64 +95,77 @@ INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES (2, 3);
 -- New Tables
 ------------------------------------------------
 
+DROP TABLE IF EXISTS `company`;
 CREATE TABLE `company` (
-  `id` bigint(20),
-  `address_id` bigint(20),
-  `name` varchar(255),
-  `type` varchar(32)
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
+  `id` bigint(20) DEFAULT NULL,
+  `address_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `contact`;
 CREATE TABLE `contact` (
-  `id` bigint(20),
-  `address_id` bigint(20),
-  `company_id` bigint(20),
--- the contact record introduced by
-  `connection_id` bigint(20),
-  `name` varchar(255),
-  `phone` varchar(255)
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
+  `id` bigint(20) DEFAULT NULL,
+  `address_id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `connection_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `history` (
-  `id` bigint(20),
-  `item_id` bigint(20),
-  `item_table` varchar(32),
-  `user_id` bigint(20),
-  `contact_id` bigint(20),
-  `company_id` bigint(20),
-  `created_date` datetime,
--- presskit, email-in, email-out, call-in, call-out
-  `type` varchar(32),
-  `summary` varchar(255),
-  `description` text
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
-
+DROP TABLE IF EXISTS `event`;
 CREATE TABLE `event` (
-  `id` bigint(20),
-  `contact_id` bigint(20),
-  `company_id` bigint(20),
-  `created_date` datetime,
-  `scheduled_date` datetime,
-  `type` varchar(32),
-  `summary` varchar(255),
+  `id` bigint(20) DEFAULT NULL,
+  `contact_id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `scheduled_date` datetime DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `summary` varchar(255) DEFAULT NULL,
   `description` text
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `url` (
-  `id` bigint(20),
-  `item_id` bigint(20),
-  `item_table` varchar(32),
--- homepage, myspace, facebook
-  `type` varchar(32),
-  `url` varchar(255),
-  `created_date` datetime
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `contact_id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `summary` varchar(255) DEFAULT NULL,
+  `description` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note` (
-  `id` bigint(20),
-  `item_id` bigint(20),
-  `item_table` varchar(32),
-  `type` varchar(32),
-  `summary` varchar(255),
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `summary` varchar(255) DEFAULT NULL,
   `description` text,
-  `created_date` datetime
-) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
+  `created_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `url`;
+CREATE TABLE `url` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `variable`;
+CREATE TABLE `variable` (
+  `id` bigint(20) NOT NULL DEFAULT '0',
+  `name` varchar(255) DEFAULT NULL,
+  `value` blob,
+  PRIMARY KEY (`id`),
+  KEY `name_idx` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

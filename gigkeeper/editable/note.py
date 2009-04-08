@@ -29,16 +29,17 @@ class NoteListField(define.definition):
 		notes = req.store.load('note', item_id=storable.get_id(),
 					item_table=storable.get_table(), __order_by='type')
 		
+		params = urllib.urlencode({
+			'__init__[item_id]'		: storable.get_id(),
+			'__init__[item_table]'	: storable.get_table(),
+		})
+		add_note_url = req.get_path(req.prepath, 'detail/note/new?') + params
+		frm['add_note'](
+			type	= 'markup',
+			value	= tags.a(href=add_note_url)['Add Note'] 
+		)
+		
 		if(notes):
-			params = urllib.urlencode({
-				'__init__[item_id]'		: storable.get_id(),
-				'__init__[item_table]'	: storable.get_table(),
-			})
-			add_note_url = req.get_path(req.prepath, 'detail/note/new?') + params
-			frm['add_note'](
-				type	= 'markup',
-				value	= tags.a(href=add_note_url)['Add Note'] 
-			)
 			for n in notes:
 				note_url = req.get_path(req.prepath, 'detail/note', n.get_id())
 				frm['notes'](
@@ -46,6 +47,9 @@ class NoteListField(define.definition):
 				)
 				frm['notes'][n.get_id()](
 					type	= 'note',
+				)
+				frm['notes'][n.get_id()]['select'](
+					type 	= 'checkbox',
 				)
 				frm['notes'][n.get_id()]['title'](
 					type 	= 'label',

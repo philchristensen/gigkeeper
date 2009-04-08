@@ -23,16 +23,17 @@ class URLListField(define.definition):
 		urls = req.store.load('url', item_id=storable.get_id(),
 					item_table=storable.get_table(), __order_by='type')
 		
+		params = urllib.urlencode({
+			'__init__[item_id]'		: storable.get_id(),
+			'__init__[item_table]'	: storable.get_table(),
+		})
+		add_url_url = req.get_path(req.prepath, 'detail/url/new?') + params
+		frm['add_url'](
+			type	= 'markup',
+			value	= tags.a(href=add_url_url)['Add URL'] 
+		)
+		
 		if(urls):
-			params = urllib.urlencode({
-				'__init__[item_id]'		: storable.get_id(),
-				'__init__[item_table]'	: storable.get_table(),
-			})
-			add_url_url = req.get_path(req.prepath, 'detail/url/new?') + params
-			frm['add_url'](
-				type	= 'markup',
-				value	= tags.a(href=add_url_url)['Add URL'] 
-			)
 			for u in urls:
 				frm['urls'][u.get_id()](
 					prefix = '<div>',

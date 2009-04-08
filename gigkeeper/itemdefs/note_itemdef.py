@@ -48,7 +48,7 @@ __itemdef__ = define.itemdef(
 		search			= True,
 	),
 	
-	description			= string.TextAreaField(
+	description			= fck.FCKEditorField(
 		label			= 'description:',
 		rows			= 8,
 		cols			= 70,

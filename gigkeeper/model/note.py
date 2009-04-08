@@ -10,6 +10,7 @@ from modu.util import OrderedDict as odict
 NOTE_TYPES = odict([
 	('booking',		'Booking Info'),
 	('review',		'Review'),
+	('backline',	'Backline Info'),
 ])
 
 class Note(storable.Storable):
