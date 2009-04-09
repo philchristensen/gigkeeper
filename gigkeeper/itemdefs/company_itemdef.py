@@ -42,6 +42,14 @@ __itemdef__ = define.itemdef(
 		required		= True,
 	),
 	
+	phone				= string.StringField(
+		label			= 'phone:',
+		size			= 60,
+		maxlength 		= 255,
+		weight			= 2,
+		listing			= True,
+	),
+	
 	history				= history.HistoryListField(
 		label			= 'History:',
 		weight			= 2.2,
