@@ -13,7 +13,7 @@ from gigkeeper.model import event
 from gigkeeper.editable import url, note, history
 
 def contact_callback(req, frm, storable):
-	return storable.contact_id
+	return getattr(storable, 'contact_id', None)
 
 __itemdef__ = define.itemdef(
 	__config			= dict(
