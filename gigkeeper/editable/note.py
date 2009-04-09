@@ -15,15 +15,11 @@ from gigkeeper.model import note
 
 class NoteListField(define.definition):
 	"""
-	Display a list of URLs for this record.
+	Display a list of notes for this record.
 	"""
 	def get_element(self, req, style, storable):
 		frm = form.FormNode(self.name)
 		frm.theme = theme.GigkeeperTheme
-		
-		req.content.report('header', tags.style(type="text/css")[
-			"@import '%s';" % req.get_path('gigkeeper-assets/admin-styles.css')
-		])
 		
 		req.store.ensure_factory('note', model_class=note.Note)
 		notes = req.store.load('note', item_id=storable.get_id(),
@@ -72,7 +68,7 @@ class NoteListField(define.definition):
 				)
 				frm['notes'][n.get_id()]['body'](
 					type 	= 'body_text',
-					value	= n.description,
+					value	= n.summarize(length=50),
 				)
 		
 		return frm

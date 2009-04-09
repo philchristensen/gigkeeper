@@ -17,6 +17,9 @@ from modu.editable.datatypes import fck
 
 from gigkeeper.resource import index
 
+def admin_site_stylesheet_callback(req):
+	return req.get_path('gigkeeper-assets/admin-styles.css')
+
 class Site(object):
 	classProvides(plugin.IPlugin, app.ISite)
 	
@@ -41,6 +44,7 @@ class Site(object):
 		
 		import gigkeeper.itemdefs
 		application.activate('/admin', resource.AdminResource, default_path='admin/listing/page', itemdef_module=gigkeeper.itemdefs)
+		application.admin_site_stylesheet = admin_site_stylesheet_callback
 		
 		application.activate('/fck', fck.FCKEditorResource)
 		application.activate('/', index.Resource)

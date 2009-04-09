@@ -8,6 +8,18 @@ from modu.persist import sql
 from modu.util import form, tags
 from modu.editable.datatypes import relational
 
+def contact_autocomplete_callback(req, partial, definition):
+	"""
+	Do an INSTR match to find the user first, last or username.
+	"""
+	ac_query = "SELECT id, name AS name FROM `contact` WHERE INSTR(name, %s) LIMIT 50"
+	results = req.store.pool.runQuery(ac_query, [partial])
+	content = ''
+	for result in results:
+		content += "%s|%d\n" % (result['name'], result['id'])
+	
+	return content
+
 class ItemTitleField(relational.ForeignLabelField):
 	"""
 	Display the item title for this record.

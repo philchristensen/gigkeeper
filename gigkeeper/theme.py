@@ -15,7 +15,7 @@ class GigkeeperTheme(theme.Theme):
 		
 			theme_func = getattr(thm, 'theme_' + child.attr('type', 'fieldset'))
 			
-			content += tags.div()[theme_func(element.name, child)]
+			content += tags.div(_class="note")[theme_func(element.name, child)]
 		
 		return content
 	

@@ -95,10 +95,24 @@ INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES (2, 3);
 -- New Tables
 ------------------------------------------------
 
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `region` varchar(255) DEFAULT NULL,
+  `zip` varchar(16) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `company`;
 CREATE TABLE `company` (
   `id` bigint(20) DEFAULT NULL,
-  `address_id` bigint(20) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `type` varchar(32) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -106,7 +120,6 @@ CREATE TABLE `company` (
 DROP TABLE IF EXISTS `contact`;
 CREATE TABLE `contact` (
   `id` bigint(20) DEFAULT NULL,
-  `address_id` bigint(20) DEFAULT NULL,
   `company_id` bigint(20) DEFAULT NULL,
   `connection_id` bigint(20) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -122,7 +135,7 @@ CREATE TABLE `event` (
   `created_date` datetime DEFAULT NULL,
   `scheduled_date` datetime DEFAULT NULL,
   `type` varchar(32) DEFAULT NULL,
-  `summary` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `description` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

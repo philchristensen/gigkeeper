@@ -10,20 +10,23 @@ from modu.editable.datatypes import string, boolean, fck
 from modu.editable.datatypes import date, select, relational
 
 from gigkeeper.model import event
-from gigkeeper.editable import url, note
+from gigkeeper.editable import url, note, history
+
+def contact_callback(req, frm, storable):
+	return storable.contact_id
 
 __itemdef__ = define.itemdef(
 	__config			= dict(
 		name			= 'event',
 		label			= 'events',
 		acl				= 'access admin',
-		category		= 'booking',
-		weight			= 1,
+		category		= 'relationships',
+		weight			= 3,
 		model_class		= event.Event,
-		title_column	= 'summary',
+		title_column	= 'name',
 	),
 	
-	summary				= string.StringField(
+	name				= string.StringField(
 		label			= 'summary:',
 		size			= 60,
 		maxlength 		= 255,
@@ -54,13 +57,11 @@ __itemdef__ = define.itemdef(
 		weight			= 3.5,
 	),
 	
-	created_date		= date.DateField(
+	created_date		= date.CurrentDateField(
 		label			= 'created date:',
-		style			= 'date',
 		save_format		= 'datetime',
-		default_now		= True,
+		default_checked	= True,
 		weight			= 3.7,
-		help			= 'This field will automatically be set when the record is saved for the first time.',
 	),
 	
 	company_id			= relational.ForeignSelectField(
@@ -84,4 +85,19 @@ __itemdef__ = define.itemdef(
 		order_by		= 'name'
 	),
 	
+	history				= history.HistoryListField(
+		label			= 'History:',
+		weight			= 5.2,
+		contact_callback= contact_callback,
+	),
+	
+	urls				= url.URLListField(
+		label			= 'URLs:',
+		weight			= 6,
+	),
+	
+	notes				= note.NoteListField(
+		label			= 'notes:',
+		weight			= 7,
+	),
 )

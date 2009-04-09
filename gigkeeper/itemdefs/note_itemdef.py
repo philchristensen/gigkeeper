@@ -6,7 +6,8 @@
 
 from modu import util
 from modu.editable import define
-from modu.editable.datatypes import string, boolean, fck, select
+from modu.editable.datatypes import string, boolean
+from modu.editable.datatypes import date, fck, select
 
 from gigkeeper import editable
 from gigkeeper.model import note
@@ -16,7 +17,7 @@ __itemdef__ = define.itemdef(
 		name			= 'note',
 		label			= 'notes',
 		acl				= 'access admin',
-		category		= 'contact info',
+		category		='relationships',
 		weight			= 2,
 		model_class		= note.Note,
 		hidden			= True,
@@ -53,6 +54,13 @@ __itemdef__ = define.itemdef(
 		rows			= 8,
 		cols			= 70,
 		weight			= 3,
+	),
+	
+	created_date		= date.CurrentDateField(
+		label			= 'created date:',
+		save_format		= 'datetime',
+		default_checked	= True,
+		weight			= 3.5,
 	),
 	
 	item_id				= string.HiddenField(

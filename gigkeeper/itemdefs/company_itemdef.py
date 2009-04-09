@@ -9,15 +9,15 @@ from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck, select
 
 from gigkeeper.model import company
-from gigkeeper.editable import url, note
+from gigkeeper.editable import url, note, address, history
 
 __itemdef__ = define.itemdef(
 	__config			= dict(
 		name			= 'company',
 		label			= 'companies',
 		acl				= 'access admin',
-		category		= 'contact info',
-		weight			= 1,
+		category		='relationships',
+		weight			= 2,
 		model_class		= company.Company,
 		title_column	= 'name',
 	),
@@ -38,6 +38,16 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 		link			= True,
 		search			= True,
+	),
+	
+	history				= history.HistoryListField(
+		label			= 'History:',
+		weight			= 2.2,
+	),
+	
+	addresses			= address.AddressListField(
+		label			= 'Addresses:',
+		weight			= 2.5,
 	),
 	
 	urls				= url.URLListField(

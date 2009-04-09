@@ -9,14 +9,17 @@ from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck, select, relational
 
 from gigkeeper.model import contact
-from gigkeeper.editable import url, note
+from gigkeeper.editable import url, note, address, history
+
+def contact_callback(req, frm, storable):
+	return storable.get_id()
 
 __itemdef__ = define.itemdef(
 	__config			= dict(
 		name			= 'contact',
 		label			= 'contacts',
 		acl				= 'access admin',
-		category		= 'contact info',
+		category		='relationships',
 		weight			= 1,
 		model_class		= contact.Contact,
 		title_column	= 'name',
@@ -42,12 +45,6 @@ __itemdef__ = define.itemdef(
 		order_by		= 'name'
 	),
 	
-	address_id			= string.LabelField(
-		label			= 'address:',
-		help			= "Not yet implemented.",
-		weight			= 4,
-	),
-	
 	phone				= string.StringField(
 		label			= 'phone:',
 		size			= 60,
@@ -62,5 +59,26 @@ __itemdef__ = define.itemdef(
 		maxlength 		= 255,
 		weight			= 6,
 		listing			= True,
+	),
+	
+	history				= history.HistoryListField(
+		label			= 'History:',
+		weight			= 6.2,
+		contact_callback= contact_callback,
+	),
+	
+	addresses			= address.AddressListField(
+		label			= 'Addresses:',
+		weight			= 6.5,
+	),
+	
+	urls				= url.URLListField(
+		label			= 'URLs:',
+		weight			= 7,
+	),
+	
+	notes				= note.NoteListField(
+		label			= 'notes:',
+		weight			= 8,
 	),
 )
