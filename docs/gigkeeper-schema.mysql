@@ -1,0 +1,93 @@
+-- gigkeeper
+-- Copyright (C) 2008 gigkeeper
+--
+-- $Id$
+--
+
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `address1` varchar(255) DEFAULT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `region` varchar(255) DEFAULT NULL,
+  `zip` varchar(16) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `company`;
+CREATE TABLE `company` (
+  `id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `contact`;
+CREATE TABLE `contact` (
+  `id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `connection_id` bigint(20) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `event`;
+CREATE TABLE `event` (
+  `id` bigint(20) DEFAULT NULL,
+  `contact_id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `scheduled_date` datetime DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `contact_id` bigint(20) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `summary` varchar(255) DEFAULT NULL,
+  `description` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `note`;
+CREATE TABLE `note` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `summary` varchar(255) DEFAULT NULL,
+  `description` text,
+  `created_date` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `url`;
+CREATE TABLE `url` (
+  `id` bigint(20) DEFAULT NULL,
+  `item_id` bigint(20) DEFAULT NULL,
+  `item_table` varchar(32) DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `variable`;
+CREATE TABLE `variable` (
+  `id` bigint(20) NOT NULL DEFAULT '0',
+  `name` varchar(255) DEFAULT NULL,
+  `value` blob,
+  PRIMARY KEY (`id`),
+  KEY `name_idx` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
