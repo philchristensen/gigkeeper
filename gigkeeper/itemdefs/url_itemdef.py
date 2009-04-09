@@ -34,6 +34,7 @@ __itemdef__ = define.itemdef(
 	type				= select.SelectField(
 		label			= 'type:',
 		options			= url.URL_TYPES,
+		default_value	= url.URL_TYPES.keys()[0],
 		weight			= 1,
 		search			= True,
 		listing			= True,

@@ -11,6 +11,9 @@ from modu.editable.datatypes import string, boolean, fck, select
 from gigkeeper.model import company
 from gigkeeper.editable import url, note, address, history
 
+def address_name_callback(req, frm, storable):
+	return storable.name
+
 __itemdef__ = define.itemdef(
 	__config			= dict(
 		name			= 'company',
@@ -58,6 +61,7 @@ __itemdef__ = define.itemdef(
 	addresses			= address.AddressListField(
 		label			= 'Addresses:',
 		weight			= 2.5,
+		address_name_callback = address_name_callback,
 	),
 	
 	urls				= url.URLListField(

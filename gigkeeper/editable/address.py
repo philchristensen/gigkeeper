@@ -25,11 +25,16 @@ class AddressListField(define.definition):
 		addresses = req.store.load('address', item_id=storable.get_id(),
 					item_table=storable.get_table(), __order_by='type')
 		
-		params = urllib.urlencode({
+		params = {
 			'__init__[item_id]'		: storable.get_id(),
 			'__init__[item_table]'	: storable.get_table(),
-		})
-		add_address_url = req.get_path(req.prepath, 'detail/address/new?') + params
+		}
+
+		address_name_callback = self.get('address_name_callback', None)
+		if(callable(address_name_callback)):
+			params['__init__[name]'] = address_name_callback(req, frm, storable)
+		
+		add_address_url = req.get_path(req.prepath, 'detail/address/new?') + urllib.urlencode(params)
 		frm['add_address'](
 			type	= 'markup',
 			value	= tags.a(href=add_address_url)['Add Address'] 
