@@ -34,6 +34,7 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 		link			= True,
 		search			= True,
+		required		= True,
 	),
 	
 	description			= string.TextAreaField(
@@ -47,6 +48,7 @@ __itemdef__ = define.itemdef(
 		weight			= 3,
 		search			= True,
 		listing			= True,
+		required		= True,
 	),
 	
 	scheduled_date		= date.DateField(
@@ -55,6 +57,7 @@ __itemdef__ = define.itemdef(
 		save_format		= 'datetime',
 		listing			= True,
 		weight			= 3.5,
+		required		= True,
 	),
 	
 	created_date		= date.CurrentDateField(

@@ -28,6 +28,7 @@ __itemdef__ = define.itemdef(
 		search			= True,
 		listing			= True,
 		weight			= 1,
+		required		= True,
 	),
 	
 	name				= string.StringField(
@@ -38,6 +39,7 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 		link			= True,
 		search			= True,
+		required		= True,
 	),
 	
 	history				= history.HistoryListField(

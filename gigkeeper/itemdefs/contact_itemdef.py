@@ -33,6 +33,7 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 		link			= True,
 		search			= True,
+		required		= True,
 	),
 	
 	company_id			= relational.ForeignSelectField(
