@@ -53,7 +53,7 @@ __itemdef__ = define.itemdef(
 	
 	scheduled_date		= date.DateField(
 		label			= 'scheduled date:',
-		style			= 'date',
+		style			= 'datetime',
 		save_format		= 'datetime',
 		listing			= True,
 		weight			= 3.5,
