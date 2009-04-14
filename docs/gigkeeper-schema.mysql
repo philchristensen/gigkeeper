@@ -63,6 +63,25 @@ CREATE TABLE `history` (
   `description` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `media`;
+CREATE TABLE `media` (
+  `id` bigint(20),
+  `item_table` varchar(32),
+  `item_id` bigint(20),
+  `type` varchar(32),
+  `format` varchar(32),
+  `quality` varchar(32),
+  `filename` varchar(255),
+  `filesize` int(11),
+  `md5` char(32),
+  `created_date` datetime,
+  PRIMARY KEY (`id`),
+  KEY item_table_idx(`item_table`),
+  KEY item_idx(`item_id`),
+  KEY type_idx(`type`),
+  KEY format_idx(`format`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `note`;
 CREATE TABLE `note` (
   `id` bigint(20) DEFAULT NULL,

@@ -10,7 +10,7 @@ from modu.editable.datatypes import string, boolean, fck
 from modu.editable.datatypes import date, select, relational
 
 from gigkeeper.model import event
-from gigkeeper.editable import url, note, history
+from gigkeeper.editable import url, note, history, media
 
 def contact_callback(req, frm, storable):
 	return getattr(storable, 'contact_id', None)
@@ -40,6 +40,12 @@ __itemdef__ = define.itemdef(
 	description			= string.TextAreaField(
 		label			= 'description:',
 		weight			= 2,
+	),
+	
+	cover_fee			= string.StringField(
+		label			= 'cover fee:',
+		size			= 10,
+		weight			= 2.5,
 	),
 	
 	type				= select.SelectField(
@@ -88,8 +94,13 @@ __itemdef__ = define.itemdef(
 		order_by		= 'name'
 	),
 	
+	media				= media.MediaListField(
+		label			= 'media:',
+		weight			= 5.1,
+	),
+	
 	history				= history.HistoryListField(
-		label			= 'History:',
+		label			= 'history:',
 		weight			= 5.2,
 		contact_callback= contact_callback,
 	),
