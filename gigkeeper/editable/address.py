@@ -35,10 +35,16 @@ class AddressListField(define.definition):
 			params['__init__[name]'] = address_name_callback(req, frm, storable)
 		
 		add_address_url = req.get_path(req.prepath, 'detail/address/new?') + urllib.urlencode(params)
-		frm['add_address'](
-			type	= 'markup',
-			value	= tags.a(href=add_address_url)['Add Address'] 
-		)
+		if(storable.get_id()):
+			frm['add_address'](
+				type	= 'markup',
+				value	= tags.a(href=add_address_url)['Add Address'] 
+			)
+		else:
+			frm['add_address'](
+				type	= 'label',
+				value	= "Please save this record before adding addresses.",
+			)
 		
 		if(addresses):
 			for a in addresses:

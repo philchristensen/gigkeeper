@@ -28,10 +28,17 @@ class URLListField(define.definition):
 			'__init__[item_table]'	: storable.get_table(),
 		})
 		add_url_url = req.get_path(req.prepath, 'detail/url/new?') + params
-		frm['add_url'](
-			type	= 'markup',
-			value	= tags.a(href=add_url_url)['Add URL'] 
-		)
+		
+		if(storable.get_id()):
+			frm['add_url'](
+				type	= 'markup',
+				value	= tags.a(href=add_url_url)['Add URL'] 
+			)
+		else:
+			frm['add_url'](
+				type	= 'label',
+				value	= "Please save this record before adding URLs.",
+			)
 		
 		if(urls):
 			for u in urls:

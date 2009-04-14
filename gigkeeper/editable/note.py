@@ -30,10 +30,17 @@ class NoteListField(define.definition):
 			'__init__[item_table]'	: storable.get_table(),
 		})
 		add_note_url = req.get_path(req.prepath, 'detail/note/new?') + params
-		frm['add_note'](
-			type	= 'markup',
-			value	= tags.a(href=add_note_url)['Add Note'] 
-		)
+		
+		if(storable.get_id()):
+			frm['add_note'](
+				type	= 'markup',
+				value	= tags.a(href=add_note_url)['Add Note'] 
+			)
+		else:
+			frm['add_note'](
+				type	= 'label',
+				value	= "Please save this record before adding notes.",
+			)
 		
 		if(notes):
 			for n in notes:

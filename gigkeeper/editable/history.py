@@ -33,10 +33,16 @@ class HistoryListField(define.definition):
 			params['__init__[contact_id]'] = contact_callback(req, frm, storable)
 		
 		add_history_url = req.get_path(req.prepath, 'detail/history/new?') + urllib.urlencode(params)
-		frm['add_history'](
-			type	= 'markup',
-			value	= tags.a(href=add_history_url)['Add History'] 
-		)
+		if(storable.get_id()):
+			frm['add_history'](
+				type	= 'markup',
+				value	= tags.a(href=add_history_url)['Add History'] 
+			)
+		else:
+			frm['add_history'](
+				type	= 'label',
+				value	= "This item has no history yet.",
+			)
 		
 		if(histories):
 			for h in histories:
