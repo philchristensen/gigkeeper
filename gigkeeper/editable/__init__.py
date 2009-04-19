@@ -4,9 +4,14 @@
 # $Id$
 #
 
+import os.path
+
 from modu.persist import sql
 from modu.util import form, tags
+from modu.editable.resource import select_template_root
 from modu.editable.datatypes import relational
+
+import gigkeeper
 
 def contact_autocomplete_callback(req, partial, definition):
 	"""
@@ -19,6 +24,22 @@ def contact_autocomplete_callback(req, partial, definition):
 		content += "%s|%d\n" % (result['name'], result['id'])
 	
 	return content
+
+class AdminTemplateResourceMixin(object):
+	def get_template_root(self, req, template=None):
+		"""
+		@see: L{modu.web.resource.ITemplate.get_template_root()}
+		"""
+		if(template is None):
+			template = self.get_template(req)
+		
+		template_root = select_template_root(req, template)
+		
+		if(os.path.exists(os.path.join(template_root, template))):
+			return template_root
+		
+		return os.path.join(os.path.dirname(gigkeeper.__file__), 'assets', 'default-template')
+
 
 class ItemTitleField(relational.ForeignLabelField):
 	"""
