@@ -19,6 +19,41 @@ CREATE TABLE `address` (
   `country` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `artist_data_import_temp`;
+CREATE TABLE `artist_data_import_temp` (
+  `id` bigint(20) auto_increment,
+  `date` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  `showname` varchar(255) DEFAULT NULL,
+  `doors_time` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `venue_name` varchar(255) DEFAULT NULL,
+  `venue_address` varchar(255) DEFAULT NULL,
+  `venue_url` varchar(255) DEFAULT NULL,
+  `venue_zip` varchar(255) DEFAULT NULL,
+  `venue_phone` varchar(255) DEFAULT NULL,
+  `age_limit` varchar(255) DEFAULT NULL,
+  `ticket_price` varchar(255) DEFAULT NULL,
+  `ticket_url` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `other_artist_1` varchar(255) DEFAULT NULL,
+  `other_artist_1_time` varchar(255) DEFAULT NULL,
+  `other_artist_1_url` varchar(255) DEFAULT NULL,
+  `other_artist_1_settype` varchar(255) DEFAULT NULL,
+  `other_artist_2` varchar(255) DEFAULT NULL,
+  `other_artist_2_time` varchar(255) DEFAULT NULL,
+  `other_artist_2_url` varchar(255) DEFAULT NULL,
+  `other_artist_2_settype` varchar(255) DEFAULT NULL,
+  `other_artist_3` varchar(255) DEFAULT NULL,
+  `other_artist_3_time` varchar(255) DEFAULT NULL,
+  `other_artist_3_url` varchar(255) DEFAULT NULL,
+  `other_artist_3_settype` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS `company`;
 CREATE TABLE `company` (
   `id` bigint(20) DEFAULT NULL,

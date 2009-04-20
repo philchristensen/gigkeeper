@@ -6,6 +6,7 @@
 
 from modu.web import resource, app
 from modu.util import form, csv
+from modu.persist import sql
 
 from gigkeeper.editable import AdminTemplateResourceMixin
 
@@ -64,25 +65,51 @@ class Resource(AdminTemplateResourceMixin, resource.CheetahTemplateResource):
 	"""
 	def prepare_content(self, req):
 		"""
-		Setup the upload form, and process RSS feed for import.
-		
 		@see: L{modu.web.resource.IContent.prepare_content()}
 		"""
-		import_form = form.FormNode('import-form')
-		import_form(enctype='multipart/form-data')
-		import_form['upload'](type = 'file', label='upload datafile:')
-		import_form['submit'](type='submit')
-		import_form.validate = self.validate_import
-		import_form.submit = self.submit_import
+		self.set_slot('current_form', '')
 		
-		self.set_slot('csv_file', '')
+		if(self.is_import_in_progress(req)):
+			self.prepare_reconcilliation(req)
+		else:
+			self.prepare_upload(req)
 		
-		if not(import_form.execute(req)):
-			import_form.escalate_errors(req)
-		
-		self.set_slot('import_form', import_form.render(req))
+	def is_import_in_progress(self, req):
+		result = req.store.pool.runQuery("SELECT COUNT(*) AS total FROM artist_data_import_temp")
+		if(result and result[0]['total']):
+			return True
+		return False
 	
-	def validate_import(self, req, frm):
+	def prepare_upload(self, req):
+		"""
+		Setup the upload form, and process RSS feed for import.
+		"""
+		upload_form = self.get_upload_form(req)
+		if(upload_form.execute(req)):
+			app.redirect(req.get_path(req.path))
+		else:
+			upload_form.escalate_errors(req)
+		
+		self.set_slot('current_form', upload_form.render(req))
+	
+	def get_upload_form(self, req):
+		upload_form = form.FormNode('import-form')
+
+		upload_form(enctype='multipart/form-data')
+		upload_form['upload'](
+			type	= 'file',
+			label	= 'upload datafile:'
+		)
+		upload_form['submit'](
+			type	= 'submit',
+			value	= 'upload',
+		)
+		upload_form.validate = self.validate_upload
+		upload_form.submit = self.submit_upload
+		
+		return upload_form
+	
+	def validate_upload(self, req, frm):
 		"""
 		Upload form validation callback.
 		
@@ -93,13 +120,37 @@ class Resource(AdminTemplateResourceMixin, resource.CheetahTemplateResource):
 			return False
 		return True
 	
-	def submit_import(self, req, frm):
+	def submit_upload(self, req, frm):
 		upload_file = req.data['import-form']['upload'].file
 		upload_file.readline()
-		csv_file = csv.parse(upload_file, column_names=csv_header_list)
-		self.set_slot('csv_file', str(csv_file))
+		csv_data = csv.parse(upload_file, column_names=csv_header_list)
+		for record in csv_data:
+			insert_query = sql.build_insert('artist_data_import_temp', record)
+			req.store.pool.runOperation(insert_query)
 		
 		return True
+	
+	def prepare_reconcilliation(self, req):
+		req.store.ensure_factory('artist_data_import_temp', guid_table=None)
+		import_record = req.store.load_one('artist_data_import_temp', __limit='1', __order_by='id ASC')
+		
+		reconcilliation_form = self.get_reconcilliation_form(req, import_record)
+		if not(reconcilliation_form.execute(req)):
+			reconcilliation_form.escalate_errors(req)
+		
+		self.set_slot('current_form', reconcilliation_form.render(req))
+	
+	def get_reconcilliation_form(self, req, import_record):
+		reconcilliation_form = form.FormNode('reconcilliation-form')
+		
+		for column in csv_header_list:
+			reconcilliation_form[column](
+				type		= 'textfield',
+				label		= column.replace('_', ' '),
+				value		= getattr(import_record, column, 'n/a'),
+			)
+		
+		return reconcilliation_form
 	
 	def get_template(self, req):
 		"""
