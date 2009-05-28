@@ -19,3 +19,6 @@ class Media(storable.Storable):
 		Create a new media object.
 		"""
 		super(Media, self).__init__('media')
+	
+	def get_url(self, req):
+		return req.get_path('uploads', self.filename)
