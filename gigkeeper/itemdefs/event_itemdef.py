@@ -37,6 +37,14 @@ __itemdef__ = define.itemdef(
 		required		= True,
 	),
 	
+	artistdata_id		= string.StringField(
+		label			= 'artistdata ident:',
+		size			= 60,
+		maxlength 		= 255,
+		weight			= 1.5,
+		help			= "do not set or change this unless you know what you're doing!",
+	),
+	
 	description			= string.TextAreaField(
 		label			= 'description:',
 		weight			= 2,
