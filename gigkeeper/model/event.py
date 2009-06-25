@@ -7,7 +7,7 @@
 from modu.persist import storable, sql
 from modu.util import OrderedDict as odict
 
-from gigkeeper.model import ModelURLMixin
+from gigkeeper.model import ModelURLMixin, media
 
 EVENT_TYPES = odict([
 	('performance',		'Performance'),
@@ -29,4 +29,13 @@ class Event(storable.Storable, ModelURLMixin):
 	
 	def get_html_description(self):
 		return self.description.replace("\n", "<br/>")
-		
+	
+	def get_flyer_url(self, req):
+		store = self.get_store()
+		store.ensure_factory('media', model_class=media.Media)
+		flyer = store.load_one('media', item_id=self.get_id(), item_table=self.get_table(),
+								filename=sql.RAW("LEFT(%s, 7) = 'flyers/'"))
+		if not(flyer):
+			return ''
+		else:
+			return req.get_path('uploads', flyer.filename)
