@@ -77,7 +77,7 @@ def update_show(store, show):
 	print 'saved %s' % evt.get_data()
 	#store.save(evt)
 
-if(__name__ == '__main__'):
+def main():
 	from modu.persist import dbapi, Store
 	from modu.sites.seaflux_site import db_url
 	
@@ -86,3 +86,6 @@ if(__name__ == '__main__'):
 	
 	for show in parse_feed(feed_url):
 		update_show(store, show)
+
+if(__name__ == '__main__'):
+	main()
