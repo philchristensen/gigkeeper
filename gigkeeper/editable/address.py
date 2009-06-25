@@ -29,13 +29,14 @@ class AddressListField(define.definition):
 			'__init__[item_id]'		: storable.get_id(),
 			'__init__[item_table]'	: storable.get_table(),
 		}
-
-		address_name_callback = self.get('address_name_callback', None)
-		if(callable(address_name_callback)):
-			params['__init__[name]'] = address_name_callback(req, frm, storable)
 		
-		add_address_url = req.get_path(req.prepath, 'detail/address/new?') + urllib.urlencode(params)
 		if(storable.get_id()):
+			address_name_callback = self.get('address_name_callback', None)
+			if(callable(address_name_callback)):
+				params['__init__[name]'] = address_name_callback(req, frm, storable)
+			
+			add_address_url = req.get_path(req.prepath, 'detail/address/new?') + urllib.urlencode(params)
+			
 			frm['add_address'](
 				type	= 'markup',
 				value	= tags.a(href=add_address_url)['Add Address'] 
