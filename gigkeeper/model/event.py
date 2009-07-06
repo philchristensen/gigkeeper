@@ -15,7 +15,7 @@ EVENT_TYPES = odict([
 
 def get_upcoming_events(store):
 	store.ensure_factory('event', model_class=Event)
-	events = store.load('event', scheduled_date=sql.RAW('%s > CURDATE()'))
+	events = store.load('event', scheduled_date=sql.RAW('%s > CURDATE()'), __order_by='scheduled_date')
 	return events or []
 
 def get_prior_events(store):
