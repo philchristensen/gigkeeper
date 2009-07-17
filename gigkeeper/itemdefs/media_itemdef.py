@@ -4,31 +4,24 @@
 # $Id$
 #
 
-import os, os.path
+import os.path
 
 from modu.util import tags
 from modu.editable import define
 from modu.editable.datatypes import string, select, boolean, fck, date
 
 from gigkeeper.model import media
-from gigkeeper.util.media import get_media_details, get_checksum
 from gigkeeper import editable
 
 def media_prewrite_callback(req, frm, storable):
 	filename = getattr(storable, 'filename', '')
 	if(filename):
-		storable.type, storable.format, storable.quality = get_media_details(filename)
-		
-		if not(storable.type and storable.format and storable.quality):
-			req.messages.report('error', "Sorry, %s is not a supported file type." % filename)
-			return False
-		
 		full_path = os.path.join(req.app.upload_path, filename)
-		
-		storable.md5 = get_checksum(full_path, md5_path=req.app.md5_path)
-		
-		st_info = os.stat(full_path)
-		storable.filesize = st_info.st_size
+		try:
+			storable.populate_from(full_path, req.app.md5_path)
+		except ValueError, e:
+			req.messages.report('error', str(e))
+			return False
 	return True
 
 __itemdef__ = define.itemdef(

@@ -10,10 +10,12 @@ from modu.util import OrderedDict as odict
 
 extension_map = odict([
 	('.jpg'		, ('image', 'jpeg', 'master')),
+	('.png'		, ('image', 'png', 'master')),
+	('.mp3'		, ('audio', 'mp3', 'streaming')),
 ])
 
 def get_checksum(filepath, md5_path='md5sum'):
-	handle = os.popen(md5_path + ' ' + filepath.replace(r';', r'\;'))
+	handle = os.popen(md5_path + ' "' + filepath.replace(r';', r'\;') + '"')
 	filehash = handle.read()
 	handle.close()
 	
