@@ -13,6 +13,24 @@ from modu.editable.datatypes import relational
 
 import gigkeeper
 
+def event_autocomplete_callback(req, partial, definition):
+	"""
+	Do an INSTR match to find the user first, last or username.
+	"""
+	ac_query = """SELECT e.id, CONCAT(DATE_FORMAT(e.scheduled_date, '%%Y-%%m-%%d @ %%h:%%i%%p'), ' - ', c.name) AS name
+					FROM event e
+					INNER JOIN company c ON c.id = e.company_id
+				   WHERE INSTR(CONCAT(DATE_FORMAT(e.scheduled_date, '%%Y-%%m-%%d @ %%h:%%i%%p'), ' - ', c.name), %s)
+				   ORDER BY e.scheduled_date DESC
+				   LIMIT 50
+				"""
+	results = req.store.pool.runQuery(ac_query, [partial])
+	content = ''
+	for result in results:
+		content += "%s|%d\n" % (result['name'], result['id'])
+	
+	return content
+
 def contact_autocomplete_callback(req, partial, definition):
 	"""
 	Do an INSTR match to find the user first, last or username.
@@ -82,10 +100,13 @@ class ItemTitleField(relational.ForeignLabelField):
 		suffix = ''
 		prefix = ''
 		if(style == 'listing'):
+			frm(type='hidden', value=value)
+			if(table and value):
+				label = tags.a(href=req.get_path(req.prepath, 'detail', table, value))[label]
 			frm(type='label', value=label)
 		else:
 			if not(label):
-				label = '(no label available)'
+				label = '(no link available)'
 			
 			frm(type='hidden', value=value)
 			if(table and value):

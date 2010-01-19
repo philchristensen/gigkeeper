@@ -19,3 +19,8 @@ a.note-title {
 	font-size: 10px;
 	padding-left: 10px;
 }
+
+li.related-contact span.label {
+	font-size: 10px;
+	color: #888;
+}

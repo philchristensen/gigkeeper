@@ -9,7 +9,7 @@ from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck, select
 
 from gigkeeper.model import company
-from gigkeeper.editable import url, note, address, history
+from gigkeeper.editable import url, note, address, history, contact
 
 def address_name_callback(req, frm, storable):
 	return storable.name
@@ -53,7 +53,12 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 	),
 	
-	history				= history.HistoryListField(
+	contacts			= contact.CompanyContactListField(
+		label			= 'Contacts:',
+		weight			= 2.1,
+	),
+	
+	history				= history.CompanyHistoryListField(
 		label			= 'History:',
 		weight			= 2.2,
 	),

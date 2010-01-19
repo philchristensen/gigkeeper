@@ -8,6 +8,7 @@ from modu import util
 from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck, select, relational
 
+from gigkeeper import editable
 from gigkeeper.model import contact
 from gigkeeper.editable import url, note, address, history
 
@@ -36,10 +37,18 @@ __itemdef__ = define.itemdef(
 		required		= True,
 	),
 	
+	company_link		= editable.ItemTitleField(
+		column			= 'company_id',
+		label			= 'company link:',
+		flabel			= 'name',
+		ftable			= 'company',
+		weight			= 2.5,
+		listing			= True
+	),
+	
 	company_id			= relational.ForeignSelectField(
 		label			= 'company:',
 		weight			= 3,
-		listing			= True,
 		ftable			= 'company',
 		flabel			= 'name',
 		fvalue			= 'id',
@@ -62,7 +71,7 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 	),
 	
-	history				= history.HistoryListField(
+	history				= history.ContactHistoryListField(
 		label			= 'History:',
 		weight			= 6.2,
 		contact_callback= contact_callback,
