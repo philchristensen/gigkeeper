@@ -152,7 +152,7 @@ class ContactHistoryListField(define.definition):
 	def get_element(self, req, style, storable):
 		frm = form.FormNode(self.name)
 		
-		if not(storable.get_id()):
+		if not(storable.get_id() and storable.company_id):
 			frm['event'](
 				type	= 'label',
 				value	= "This contact has no history yet.",
