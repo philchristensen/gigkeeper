@@ -24,6 +24,19 @@ class CompanyContactListField(define.definition):
 			'__init__[company_id]'		: company_id
 		}
 		
+		req.store.ensure_factory('contact', model_class=contact.Contact)
+		
+		if(company_id):
+			contacts = req.store.load('contact', company_id=company_id) or []
+			if not(contacts):
+				frm['contact'](
+					type	= 'label',
+					value	= "This company has no contacts yet.",
+				)
+				return frm
+		else:
+			contacts = []
+		
 		add_contact_url = req.get_path(req.prepath, 'detail/contact/new?') + urllib.urlencode(params)
 		if(company_id):
 			frm['add_contact'](
@@ -35,18 +48,6 @@ class CompanyContactListField(define.definition):
 				type	= 'label',
 				value	= "This item has no contacts yet.",
 			)
-		
-		
-		req.store.ensure_factory('contact', model_class=contact.Contact)
-		
-		contacts = req.store.load('contact', company_id=company_id) or []
-		
-		if not(contacts):
-			frm['contact'](
-				type	= 'label',
-				value	= "This company has no contacts yet.",
-			)
-			return frm
 		
 		for c in contacts:
 			contact_url = req.get_path(req.prepath, 'detail/contact', c.get_id())
