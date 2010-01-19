@@ -152,7 +152,7 @@ class ContactHistoryListField(define.definition):
 	def get_element(self, req, style, storable):
 		frm = form.FormNode(self.name)
 		
-		if not(storable.get_id() and storable.company_id):
+		if not(storable.get_id()):
 			frm['event'](
 				type	= 'label',
 				value	= "This contact has no history yet.",
@@ -166,10 +166,10 @@ class ContactHistoryListField(define.definition):
 									FROM event e
 										INNER JOIN contact c ON c.id = e.contact_id
 									WHERE e.contact_id IN (
-										SELECT id FROM contact WHERE company_id = %s
-									)
+										SELECT id FROM contact WHERE company_id = IF(IFNULL(%s, 0), %s, -1)
+									) OR e.contact_id = %s
 									ORDER BY e.scheduled_date DESC
-								""", storable.company_id)) or []
+								""", storable.company_id, storable.company_id, storable.get_id())) or []
 		
 		if not(events):
 			frm['event'](
