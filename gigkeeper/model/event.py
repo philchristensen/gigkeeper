@@ -27,8 +27,11 @@ class Event(storable.Storable, ModelURLMixin):
 	def __init__(self):
 		super(Event, self).__init__('event')
 	
-	def get_html_description(self):
-		return self.description.replace("\n", "<br/>")
+	def get_description(self, html=True):
+		if(html):
+			return self.description.replace("\n", "<br/>")
+		else:
+			return self.description
 	
 	def get_flyer_url(self, req):
 		store = self.get_store()
