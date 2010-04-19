@@ -71,10 +71,15 @@ __itemdef__ = define.itemdef(
 		listing			= True,
 	),
 	
-	history				= history.ContactHistoryListField(
+	history				= history.GenericHistoryListField(
 		label			= 'History:',
-		weight			= 6.2,
+		weight			= 2.2,
 		contact_callback= contact_callback,
+	),
+	
+	event_history		= history.EventHistoryListField(
+		label			= 'Event History:',
+		weight			= 2.3,
 	),
 	
 	addresses			= address.AddressListField(

@@ -58,9 +58,14 @@ __itemdef__ = define.itemdef(
 		weight			= 2.1,
 	),
 	
-	history				= history.CompanyHistoryListField(
+	history				= history.GenericHistoryListField(
 		label			= 'History:',
 		weight			= 2.2,
+	),
+	
+	event_history		= history.EventHistoryListField(
+		label			= 'Event History:',
+		weight			= 2.3,
 	),
 	
 	addresses			= address.AddressListField(

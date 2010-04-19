@@ -75,113 +75,61 @@ class GenericHistoryListField(define.definition):
 		pass
 
 
-class CompanyHistoryListField(define.definition):
+class EventHistoryListField(define.definition):
 	"""
 	Display a list of shows played at this venue,
 	or shows booked with this agency.
 	"""
 	def get_element(self, req, style, storable):
 		frm = form.FormNode(self.name)
-		company_id = storable.get_id()
+		item_id = storable.get_id()
 		
-		if not(company_id):
+		if not(item_id):
 			frm['event'](
 				type	= 'label',
-				value	= "This company has no history yet.",
+				value	= "This item has no event history yet.",
 			)
 			return frm
 		
 		req.store.ensure_factory('event', model_class=event.Event)
 		
-		if(storable.type == 'venue'):
-			events = req.store.load('event', company_id=company_id, __order_by='scheduled_date DESC') or []
-		elif(storable.type == 'agency'):
+		events = []
+		if(storable.get_table() == 'company'):
+			if(storable.type == 'venue'):
+				events = req.store.load('event', company_id=item_id, __order_by='scheduled_date DESC') or []
+			elif(storable.type == 'agency'):
+				events = req.store.load('event', 
+							sql.interp("""SELECT e.*
+											FROM event e
+											INNER JOIN (contact c
+												INNER JOIN company a ON c.company_id = a.id)
+											ON c.id = e.contact_id
+											WHERE a.type = 'agency'
+											  AND a.id = %s
+											ORDER BY e.scheduled_date DESC
+										""", item_id)) or []
+		elif(storable.get_table() == 'contact'):
 			events = req.store.load('event', 
-						sql.interp("""SELECT e.*
+						sql.interp("""SELECT e.*, c.name AS contact_name
 										FROM event e
-										INNER JOIN (contact c
-											INNER JOIN company a ON c.company_id = a.id)
-										ON c.id = e.contact_id
-										WHERE a.type = 'agency'
-										  AND a.id = %s
+											INNER JOIN contact c ON c.id = e.contact_id
+										WHERE e.contact_id IN (
+											SELECT id FROM contact WHERE company_id = IF(IFNULL(%s, 0), %s, -1)
+										) OR e.contact_id = %s
 										ORDER BY e.scheduled_date DESC
-									""", company_id)) or []
-		else:
-			events = []
+									""", storable.company_id, storable.company_id, item_id)) or []
 		
 		if not(events):
 			frm['event'](
 				type	= 'label',
-				value	= "This company has no history yet.",
-			)
-			return frm
-		
-		for e in events:
-			event_url = req.get_path(req.prepath, 'detail/event', e.get_id())
-			frm['event'][e.get_id()](
-				prefix = '<ul>',
-				suffix = '</ul>',
-			)
-			frm['event'][e.get_id()]['name'](
-				type 	= 'label',
-				value	= tags.a(href=event_url)[e.name],
-				prefix	= '<li>',
-			)
-			frm['event'][e.get_id()]['type'](
-				type 	= 'label',
-				value	= e.type,
-				prefix	= '&nbsp;&nbsp;',
-				suffix	= '</li>',
-			)
-		
-		return frm
-	
-	def update_storable(self, req, form, storable):
-		"""
-		No operation.
-		
-		@see: L{modu.editable.define.definition.update_storable()}
-		"""
-		pass
-
-
-class ContactHistoryListField(define.definition):
-	"""
-	Display a list of shows booked with this contact.
-	"""
-	def get_element(self, req, style, storable):
-		frm = form.FormNode(self.name)
-		
-		if not(storable.get_id()):
-			frm['event'](
-				type	= 'label',
-				value	= "This contact has no history yet.",
-			)
-			return frm
-		
-		req.store.ensure_factory('event', model_class=event.Event)
-		
-		events = req.store.load('event', 
-					sql.interp("""SELECT e.*, c.name AS contact_name
-									FROM event e
-										INNER JOIN contact c ON c.id = e.contact_id
-									WHERE e.contact_id IN (
-										SELECT id FROM contact WHERE company_id = IF(IFNULL(%s, 0), %s, -1)
-									) OR e.contact_id = %s
-									ORDER BY e.scheduled_date DESC
-								""", storable.company_id, storable.company_id, storable.get_id())) or []
-		
-		if not(events):
-			frm['event'](
-				type	= 'label',
-				value	= "This contact has no history yet.",
+				value	= "This item has no event history yet.",
 			)
 			return frm
 		
 		for e in events:
 			event_url = req.get_path(req.prepath, 'detail/event', e.get_id())
 			
-			is_related_contact = (e.contact_id != storable.get_id())
+			is_related_contact = (storable.get_table() == 'contact' and e.contact_id != storable.get_id())
 			related_class = (' class="related-contact"', '')[not is_related_contact]
 			related_contact_url = req.get_path(req.prepath, 'detail/contact', e.contact_id)
 			
@@ -192,7 +140,7 @@ class ContactHistoryListField(define.definition):
 			frm['event'][e.get_id()]['name'](
 				type 	= 'label',
 				value	= tags.a(href=event_url)[e.name],
-				prefix	= '<li%s>' % related_class,
+				prefix	= '<li>',
 			)
 			if(is_related_contact):
 				frm['event'][e.get_id()]['related_contact'](
