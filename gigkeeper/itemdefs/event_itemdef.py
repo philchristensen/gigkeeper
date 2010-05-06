@@ -9,6 +9,8 @@ from modu.editable import define
 from modu.editable.datatypes import string, boolean, fck
 from modu.editable.datatypes import date, select, relational
 
+from modu.editable.util import get_url_code_callback
+
 from gigkeeper import editable
 from gigkeeper.model import event
 from gigkeeper.editable import url, note, history, media
@@ -25,6 +27,7 @@ __itemdef__ = define.itemdef(
 		weight			= 3,
 		model_class		= event.Event,
 		title_column	= 'name',
+		prewrite_callback	= get_url_code_callback('name', 'url_code')
 	),
 	
 	name				= string.StringField(
@@ -36,6 +39,11 @@ __itemdef__ = define.itemdef(
 		link			= True,
 		search			= True,
 		required		= True,
+	),
+	
+	url_code			= string.StringField(
+		label			= 'url code:',
+		weight			= 1.25,
 	),
 	
 	artistdata_id		= string.StringField(

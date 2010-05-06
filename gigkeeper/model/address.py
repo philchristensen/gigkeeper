@@ -4,8 +4,6 @@
 # $Id$
 #
 
-import re
-
 from modu.persist import storable
 from modu.util import OrderedDict as odict
 
