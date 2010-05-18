@@ -21,7 +21,7 @@ class GenericHistoryListField(define.definition):
 		
 		req.store.ensure_factory('history', model_class=history.History)
 		histories = req.store.load('history', item_id=storable.get_id(),
-					item_table=storable.get_table(), __order_by='type') or []
+					item_table=storable.get_table(), __order_by='created_date DESC') or []
 		
 		params = {
 			'__init__[item_id]'		: storable.get_id(),
