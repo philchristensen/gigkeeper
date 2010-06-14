@@ -7,9 +7,10 @@
 import urllib2, datetime
 from xml.dom import minidom
 
-from gigkeeper.model import event
+from modu.editable import util
+from gigkeeper.model import event, company
 
-feed_url		= 'http://feeds.artistdata.com/xml.shows/org/MO-AY3MGPTXB717MF5E/xml'
+feed_url = 'http://feeds.artistdata.com/xml.shows/artist/AR-4AV8NOZRG715CYIN/xml'
 
 def parse_feed(feed_url):
 	feed = urllib2.urlopen(feed_url)
@@ -56,36 +57,37 @@ def parse_feed(feed_url):
 
 def update_show(store, show):
 	store.ensure_factory('event', model_class=event.Event)
+	store.ensure_factory('company', model_class=company.Company)
 	
 	evt = store.load_one('event', artistdata_id=show['recordKey'])
-	print 'found %s' % evt.get_data()
 	if(evt is None):
 		evt = event.Event()
 		evt.artistdata_id = show['recordKey']
-		evt.description = show['description']
 		evt.type = 'performance'
 	
 	date_parts = [int(x) for x in show['date'].split('-') + show['timeSet'].split(':')]
 	
-	evt.name = show['name']
+	evt.name = '%s @ %s' % (show['name'] or 'seaflux live', show['venueName'])
+	evt.url_code = util.create_url_code(evt.name, 'event', store.pool, origin_id=evt.get_id())
+	
+	# only set the description if there isn't one
+	if(show['description']):
+		evt.description = show['description']
+	
 	evt.scheduled_date = datetime.datetime(*date_parts)
 	try:
 		evt.cover_fee = int(show['ticketPrice'])
 	except ValueError:
 		evt.cover_fee = None
 	
-	print 'saved %s' % evt.get_data()
-	#store.save(evt)
+	# only set the venue if we haven't already
+	venue = store.load_one('company', type='venue', name=show['venueName'])
+	if(venue and getattr(evt, 'company_id', None) == None):
+		evt.company_id = venue.get_id()
+	
+	#print evt.get_data()
+	store.save(evt)
 
-def main():
-	from modu.persist import dbapi, Store
-	from modu.sites.seaflux_site import db_url
-	
-	pool = dbapi.connect(db_url)
-	store = Store(pool)
-	
+def sync_shows(store):
 	for show in parse_feed(feed_url):
 		update_show(store, show)
-
-if(__name__ == '__main__'):
-	main()

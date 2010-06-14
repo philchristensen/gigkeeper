@@ -46,7 +46,7 @@ class Event(storable.Storable, ModelURLMixin):
 	
 	def get_description(self, html=True):
 		if(html):
-			return self.description.replace("\n", "<br/>")
+			return self.description.replace("\r", '').replace("\n", "<br/>")
 		else:
 			return self.description
 	

@@ -15,6 +15,9 @@ COMPANY_TYPES = odict([
 	('artist',	'artist'),
 ])
 
+def find_venue(store, details):
+	pass
+
 class Company(storable.Storable):
 	def __init__(self):
 		super(Company, self).__init__('company')
